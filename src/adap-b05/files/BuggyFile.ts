@@ -1,5 +1,7 @@
 import { File } from "./File";
 import { Directory } from "./Directory";
+import { InvalidStateException } from "../common/InvalidStateException";
+import { ServiceFailureException } from "../common/ServiceFailureException";
 
 export class BuggyFile extends File {
 
@@ -13,6 +15,12 @@ export class BuggyFile extends File {
      */
     protected doGetBaseName(): string {
         this.baseName = "";
+
+        if (this.baseName === "") {
+            const invalidStateException = new InvalidStateException("Base name is invalid (empty).");
+            throw new ServiceFailureException("Service failed due to invalid state.", invalidStateException);
+        }
+
         return super.doGetBaseName();
     }
 

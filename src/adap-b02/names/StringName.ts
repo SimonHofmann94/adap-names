@@ -5,54 +5,88 @@ export class StringName implements Name {
 
     protected delimiter: string = DEFAULT_DELIMITER;
     protected name: string = "";
-    protected noComponents: number = 0;
 
-    constructor(other: string, delimiter?: string) {
-        throw new Error("needs implementation or deletion");
+    // @methodtype initialization-method
+    constructor(other: string, delimiter: string = DEFAULT_DELIMITER) {
+        this.name = other;
+        this.delimiter = delimiter;
     }
 
+    // @methodtype conversion-method
     public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
+        return this.name.split(this.delimiter).join(delimiter);
     }
 
+    // @methodtype conversion-method
     public asDataString(): string {
-        throw new Error("needs implementation or deletion");
+        return this.name.replace(new RegExp(`([${this.delimiter}${ESCAPE_CHARACTER}])`, 'g'), `${ESCAPE_CHARACTER}$1`);
     }
 
+    // @methodtype get-method
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        return this.delimiter;
     }
 
+    // @methodtype get-method
     public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+        return this.name.length === 0;
     }
 
+    // @methodtype get-method
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.name.length === 0 ? 0 : this.name.split(this.delimiter).length;
     }
 
-    public getComponent(x: number): string {
-        throw new Error("needs implementation or deletion");
+    // @methodtype get-method
+    public getComponent(i: number): string {
+        const components = this.name.split(this.delimiter);
+        if (i < 0 || i >= components.length) {
+            throw new Error("Index out of bounds");
+        }
+        return components[i];
     }
 
-    public setComponent(n: number, c: string): void {
-        throw new Error("needs implementation or deletion");
+    // @methodtype set-method
+    public setComponent(i: number, c: string): void {
+        const components = this.name.split(this.delimiter);
+        if (i < 0 || i >= components.length) {
+            throw new Error("Index out of bounds");
+        }
+        components[i] = c;
+        this.name = components.join(this.delimiter);
     }
 
-    public insert(n: number, c: string): void {
-        throw new Error("needs implementation or deletion");
+    // @methodtype command-method
+    public insert(i: number, c: string): void {
+        const components = this.name.split(this.delimiter);
+        if (i < 0 || i > components.length) {
+            throw new Error("Index out of bounds");
+        }
+        components.splice(i, 0, c);
+        this.name = components.join(this.delimiter);
     }
 
+    // @methodtype command-method
     public append(c: string): void {
-        throw new Error("needs implementation or deletion");
+        if (this.name.length > 0) {
+            this.name += this.delimiter;
+        }
+        this.name += c;
     }
 
-    public remove(n: number): void {
-        throw new Error("needs implementation or deletion");
+    // @methodtype command-method
+    public remove(i: number): void {
+        const components = this.name.split(this.delimiter);
+        if (i < 0 || i >= components.length) {
+            throw new Error("Index out of bounds");
+        }
+        components.splice(i, 1);
+        this.name = components.join(this.delimiter);
     }
 
+    // @methodtype command-method
     public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+        const components = other.asString(this.delimiter);
+        this.name += (this.name.length > 0 ? this.delimiter : '') + components;
     }
-
 }

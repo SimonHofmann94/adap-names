@@ -58,7 +58,14 @@ export class Node {
      * @param bn basename of node being searched for
      */
     public findNodes(bn: string): Set<Node> {
-        throw new Error("needs implementation or deletion");
+        IllegalArgumentException.assertIsNotNullOrUndefined(bn, "Base name cannot be null or undefined");
+
+        const result: Set<Node> = new Set();
+        if (this.getBaseName() === bn) {
+            result.add(this);
+        }
+
+        return result;
     }
 
     protected assertClassInvariants(): void {

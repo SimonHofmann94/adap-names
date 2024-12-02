@@ -1,6 +1,8 @@
 import { Node } from "./Node";
 import { Directory } from "./Directory";
 import { MethodFailedException } from "../common/MethodFailedException";
+import { IllegalArgumentException } from "../common/IllegalArgumentException";
+
 
 enum FileState {
     OPEN,
@@ -50,5 +52,13 @@ export class File extends Node {
     protected doGetFileState(): FileState {
         return this.state;
     }
+
+    public findNodes(bn: string): Set<Node> {
+        IllegalArgumentException.assertIsNotNullOrUndefined(bn, "Base name cannot be null or undefined");
+
+        const result: Set<Node> = super.findNodes(bn);
+        return result;
+    }
+
 
 }

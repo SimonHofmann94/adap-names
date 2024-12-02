@@ -1,71 +1,120 @@
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
-import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
+import { IllegalArgumentException } from "../common/IllegalArgumentException";
+import { InvalidStateException } from "../common/InvalidStateException";
+import { MethodFailedException } from "../common/MethodFailedException";
 
 export class StringName extends AbstractName {
 
     protected name: string = "";
-    protected noComponents: number = 0;
 
-    constructor(other: string, delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
-    }
-
-    public clone(): Name {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+    constructor(other: string, delimiter: string = DEFAULT_DELIMITER) {
+        super(delimiter);
+        this.name = other;
     }
 
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.name.length === 0 ? 0 : this.name.split(this.delimiter).length;
     }
 
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+        IllegalArgumentException.assertCondition(
+            i >= 0 && i < this.getNoComponents(),
+            `Index out of bounds: ${i}`
+        );
+    
+        const components = this.name.split(this.delimiter);
+        if (i < 0 || i >= components.length) {
+            throw new Error("Index out of bounds");
+        }
+        return components[i];
     }
 
-    public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+    public setComponent(i: number, c: string): void {
+        IllegalArgumentException.assertCondition(
+            i >= 0 && i < this.getNoComponents(),
+            `Index out of bounds: ${i}`
+        );
+        IllegalArgumentException.assertIsNotNullOrUndefined(
+            c,
+            "Component to set cannot be null or undefined"
+        );
+    
+        const components = this.name.split(this.delimiter);
+        if (i < 0 || i >= components.length) {
+            throw new Error("Index out of bounds");
+        }
+        components[i] = c;
+        MethodFailedException.assertCondition(
+            components[i] === c,
+            `Failed to set component at index ${i} to ${c}`
+        );
+    
+        this.name = components.join(this.delimiter);
     }
 
-    public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+    public insert(i: number, c: string): void {
+        const components = this.name.split(this.delimiter);
+        if (i < 0 || i > components.length) {
+            throw new Error("Index out of bounds");
+        }
+        components.splice(i, 0, c);
+        this.name = components.join(this.delimiter);
     }
 
-    public append(c: string) {
-        throw new Error("needs implementation or deletion");
+    public append(c: string): void {
+        IllegalArgumentException.assertIsNotNullOrUndefined(
+            c,
+            "Component to append cannot be null or undefined"
+        );
+    
+        if (this.name.length > 0) {
+            this.name += this.delimiter;
+        }
+        this.name += c;
     }
 
-    public remove(i: number) {
-        throw new Error("needs implementation or deletion");
+    public remove(i: number): void {
+        IllegalArgumentException.assertCondition(
+            i >= 0 && i < this.getNoComponents(),
+            `Index out of bounds: ${i}`
+        );
+    
+        const components = this.name.split(this.delimiter);
+        if (i < 0 || i >= components.length) {
+            throw new Error("Index out of bounds");
+        }
+        components.splice(i, 1);
+        this.name = components.join(this.delimiter);
     }
 
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+    protected getComponents(): string[] {
+        return this.name.split(this.delimiter);
     }
 
+    public clone(): StringName {
+        return new StringName(this.name, this.delimiter);
+    }
+
+    public isEqual(other: AbstractName): boolean {
+        return this.name === other.asString();
+    }
+
+    public getHashCode(): number {
+        let hash = 0;
+        for (let i = 0; i < this.name.length; i++) {
+            const char = this.name.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash |= 0; 
+        }
+        return hash;
+    }
+
+    public assertClassInvariant(): void {
+        InvalidStateException.assertIsNotNullOrUndefined(
+            this.name,
+            "Name string is null or undefined"
+        );
+    }
 }
+    

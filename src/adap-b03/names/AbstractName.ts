@@ -6,52 +6,44 @@ export abstract class AbstractName implements Name {
     protected delimiter: string = DEFAULT_DELIMITER;
 
     constructor(delimiter: string = DEFAULT_DELIMITER) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public clone(): Name {
-        throw new Error("needs implementation or deletion");
+        this.delimiter = delimiter;
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public toString(): string {
-        return this.asDataString();
+        return this.asDataString().split(this.delimiter).join(delimiter);
     }
 
     public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+        return this.getComponents().map(component =>
+            component.replace(new RegExp(`([${this.delimiter}${ESCAPE_CHARACTER}])`, 'g'), `${ESCAPE_CHARACTER}$1`)
+        ).join(this.delimiter);
     }
 
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        return this.delimiter;
+    }
+
+    public isEmpty(): boolean {
+        return this.getNoComponents() === 0;
+    }
+
+    public concat(other: Name): void {
+        const noOfComponents = other.getNoComponents();
+        for (let i = 0; i < noOfComponents; i++) {
+            this.append(other.getComponent(i));
+        }
     }
 
     abstract getNoComponents(): number;
-
     abstract getComponent(i: number): string;
     abstract setComponent(i: number, c: string): void;
-
     abstract insert(i: number, c: string): void;
     abstract append(c: string): void;
     abstract remove(i: number): void;
 
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
-    }
+    protected abstract getComponents(): string[];
 
+    public abstract clone(): Name;
+    public abstract isEqual(other: Name): boolean;
+    public abstract getHashCode(): number;
 }
