@@ -38,5 +38,9 @@ export interface Name extends Printable {
     remove(i: number): void;
     
     concat(other: Name): void;
+
+    asString(delimiter?: string): string;
+
+    asDataString(): string;
     
 }
