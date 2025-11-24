@@ -22,6 +22,7 @@ export class StringArrayName extends AbstractName {
         if (i < 0 || i >= this.components.length) {
             throw new Error("Index out of bounds");
         }
+        
         return this.components[i];
     }
 
@@ -29,6 +30,7 @@ export class StringArrayName extends AbstractName {
         if (i < 0 || i >= this.components.length) {
             throw new Error("Index out of bounds");
         }
+
         this.components[i] = c;
     }
 
@@ -36,6 +38,7 @@ export class StringArrayName extends AbstractName {
         if (i < 0 || i > this.components.length) {
             throw new Error("Index out of bounds");
         }
+        
         this.components.splice(i, 0, c);
     }
 
@@ -43,6 +46,7 @@ export class StringArrayName extends AbstractName {
         if (i < 0 || i >= this.components.length) {
             throw new Error("Index out of bounds");
         }
+
         this.components.splice(i, 1);
     }
 }
