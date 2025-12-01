@@ -2,8 +2,6 @@ import { describe, it, expect } from "vitest";
 import { StringName } from "../../../src/adap-b04/names/StringName";
 import { StringArrayName } from "../../../src/adap-b04/names/StringArrayName";
 import { IllegalArgumentException } from "../../../src/adap-b04/common/IllegalArgumentException";
-import { MethodFailedException } from "../../../src/adap-b04/common/MethodFailedException";
-import { InvalidStateException } from "../../../src/adap-b04/common/InvalidStateException";
 
 describe("Preconditions", () => {
 

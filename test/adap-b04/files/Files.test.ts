@@ -1,8 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { Directory } from "../../../src/adap-b04/files/Directory";
 import { RootNode } from "../../../src/adap-b04/files/RootNode";
 import { File } from "../../../src/adap-b04/files/File";
-import { IllegalArgumentException } from "../../../src/adap-b04/common/IllegalArgumentException";
 import { InvalidStateException } from "../../../src/adap-b04/common/InvalidStateException";
 
 describe("Files Contracts", () => {
